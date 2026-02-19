@@ -128,7 +128,8 @@ ALWAYS follow this `jj` commit workflow:
 - Before committing:
     - use `jj` (which combines `jj status` and `jj log` in a customized way) to learn about status and recent revisions
         - so it's clear which revision to commit, and won't commit an empty or unrelated revision
-        - fallback to use `jj log --no-graph -T '{commit_id} {description}' -n <N>` to view the last N revisions in a concise format
+        - fallback to use `jj log --no-graph -T 'commit_id.short(7) ++ " | " ++ author.email().local() ++ " | " ++ description.first_line()' -n <N>` to view the last N revisions in a concise format
+    - **jj Template Syntax**: Use the `++` operator to concatenate fields. Common fields: `commit_id.short(N)`, `description.first_line()`, `author.email().local()`, `local_bookmarks()`, `empty()`. See [jj templates documentation](https://jj-vcs.github.io/jj/latest/templates/) for the complete field reference.
     - run `jj diff` or `jj diff -r <rev>` to review all changes in the working copy or the revision to commit.
 - During committing:
     - **Granular commits**: One logical change per commit.
