@@ -868,7 +868,9 @@ pod-proxy CMD="start":
         cat "$SSH_CONF"
         echo "  Binding: $PROXY_BIND:2375 → Colima localhost:2375"
         # Forward Host Mac <PROXY_BIND>:2375 → Colima VM localhost:2375 (docker-socket-proxy)
-        ssh -F "$SSH_CONF" colima -N \
+        # -o ControlMaster=no: bypass the ControlMaster mux (ControlPersist yes would cause
+        # the -N session to exit immediately when multiplexed over an existing connection)
+        ssh -F "$SSH_CONF" colima -N -o ControlMaster=no \
             -L "$PROXY_BIND:2375:localhost:2375" \
             2>"$SSH_LOG" &
         SSH_PID=$!
